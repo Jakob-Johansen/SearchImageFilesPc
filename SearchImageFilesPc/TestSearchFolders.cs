@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SearchImageFilesPc
@@ -16,6 +17,7 @@ namespace SearchImageFilesPc
         public List<string> imageList;
 
         private readonly Logs _log;
+        private readonly string _CopyToFolderPath = @"D:\CopyTo\";
 
         public TestSearchFolders()
         {
@@ -34,6 +36,7 @@ namespace SearchImageFilesPc
         {
             var allFolders = Directory.GetFileSystemEntries(folderPath);
 
+            Guid folderId = Guid.NewGuid();
             foreach (var item in allFolders)
             {
                 try
@@ -41,18 +44,27 @@ namespace SearchImageFilesPc
                     Console.WriteLine(item);
 
                     string fileExtension = Path.GetExtension(item).ToLower();
+
                     foreach (var format in ImageFormatArray)
                     {
                         if (fileExtension.Contains(format))
                         {
                             string fileName = item.Split('\\').Last().Split('.').First();
 
-                            string newFileName = Guid.NewGuid() + "-kopi" + fileExtension;
+                            string newFileName = fileName + "---" + Guid.NewGuid() + fileExtension;
 
-                            // Tilføj validering
+                           // Tilføj validering
                             try
                             {
-                                File.Copy(item, @"D:\CopyTo\" + newFileName);
+                                string folderName = item.Split('\\' + fileName).First().Split('\\').Last();
+                                Console.WriteLine(folderName);
+
+                                if (!Directory.Exists(_CopyToFolderPath + folderName + "---" + folderId))
+                                {
+                                    Directory.CreateDirectory(_CopyToFolderPath + folderName + "---" + folderId);
+                                }
+
+                                File.Copy(item, _CopyToFolderPath + folderName + "---" + folderId + "\\" + newFileName);
                             }
                             catch (Exception e)
                             {
@@ -66,7 +78,6 @@ namespace SearchImageFilesPc
 
                     if (Directory.Exists(item))
                     {
-                        Console.WriteLine(item);
                         FolderScan(item);
                     }
                 }
@@ -78,14 +89,5 @@ namespace SearchImageFilesPc
                 }
             }
         }
-
-        //private void KillClone(string path, string filename, string extension)
-        //{
-        //    if (filename.Contains("-kopi"))
-        //    {
-        //        File.Delete(path + filename + extension);
-        //    }
-        //}
-
     }
 }
