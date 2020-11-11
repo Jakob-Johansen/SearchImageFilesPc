@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SearchImageFilesPc
 {
-    public class SearchFolders
+    public class TestSearchFolders
     {
-        private readonly string[] ImageFormatArray = new string[] { "jpg", "jpeg", "png", "gif", "eps", "raw", "cr2", "crw", "nef", "pef", "tiff" };
+        private readonly string[] ImageFormatArray = new string[] { ".jpg", ".jpeg", ".png", ".gif", ".eps", ".raw", ".cr2", ".crw", ".nef", ".pef", ".tiff", ".webp" };
 
         public int _imageCount;
 
         public List<string> imageList;
 
-        public SearchFolders()
+        private readonly Logs _log;
+
+        public TestSearchFolders()
         {
+            _log = new Logs();
             _imageCount = 0;
             imageList = new List<string>();
         }
@@ -38,11 +38,27 @@ namespace SearchImageFilesPc
             {
                 try
                 {
-                    var test = Path.GetExtension(item).Split('.').Last();
+                    Console.WriteLine(item);
+
+                    string fileExtension = Path.GetExtension(item).ToLower();
                     foreach (var format in ImageFormatArray)
                     {
-                        if (test.ToLower().Contains(format))
+                        if (fileExtension.Contains(format))
                         {
+                            string fileName = item.Split('\\').Last().Split('.').First();
+
+                            string newFileName = Guid.NewGuid() + "-kopi" + fileExtension;
+
+                            // Tilføj validering
+                            try
+                            {
+                                File.Copy(item, @"D:\CopyTo\" + newFileName);
+                            }
+                            catch (Exception e)
+                            {
+                                _log.CreateLog(e.Message);
+                            }
+
                             _imageCount += 1;
                             imageList.Add(item);
                         }
@@ -62,5 +78,14 @@ namespace SearchImageFilesPc
                 }
             }
         }
+
+        //private void KillClone(string path, string filename, string extension)
+        //{
+        //    if (filename.Contains("-kopi"))
+        //    {
+        //        File.Delete(path + filename + extension);
+        //    }
+        //}
+
     }
 }

@@ -1,0 +1,4 @@
+!==============================================!
+Execption Message: Access to the path 'C:\Users\Monosoft\AppData\Local\Packages\Microsoft.WebpImageExtension_8wekyb3d8bbwe' is denied.
+!==============================================!
+
