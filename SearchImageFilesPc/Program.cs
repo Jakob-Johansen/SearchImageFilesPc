@@ -13,16 +13,10 @@ namespace SearchImageFilesPc
             TestSearchFolders testSearchFolders = new TestSearchFolders();
             testSearchFolders.StartScanning(@"C:\Users\");
 
-            Console.WriteLine();
-
-            //foreach (var item in testSearchFolders.imageList)
-            //{
-            //    Console.WriteLine(item);
-            //}
-
             Console.WriteLine("\n!--------------------------------------------!");
             Console.WriteLine("Billeder: " + testSearchFolders._imageCount);
             Console.WriteLine("!--------------------------------------------!\n");
+            Console.ReadKey();
         }
 
 
