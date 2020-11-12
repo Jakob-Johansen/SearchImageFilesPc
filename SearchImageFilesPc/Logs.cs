@@ -16,13 +16,26 @@ namespace SearchImageFilesPc
             _folderPath = GetFolderPath();
         }
 
-        public void CreateLog(string execption)
+        public void CreateLog(string fileName,string execption, string path)
+        {
+            string logContainerString = "!==============================================!";
+
+            using StreamWriter sw = File.AppendText(_folderPath);
+            sw.WriteLine(logContainerString);
+            sw.WriteLine("Filename: " + fileName);
+            sw.WriteLine("Execption Message: " + execption);
+            sw.WriteLine("Path: " + path);
+            sw.WriteLine(logContainerString + "\n");
+        }
+
+        public void CreateLog(string execption, string path)
         {
             string logContainerString = "!==============================================!";
 
             using StreamWriter sw = File.AppendText(_folderPath);
             sw.WriteLine(logContainerString);
             sw.WriteLine("Execption Message: " + execption);
+            sw.WriteLine("Path: " + path);
             sw.WriteLine(logContainerString + "\n");
         }
 

@@ -37,38 +37,40 @@ namespace SearchImageFilesPc
             var allFolders = Directory.GetFileSystemEntries(folderPath);
 
             Guid folderId = Guid.NewGuid();
+
             foreach (var item in allFolders)
             {
                 try
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(item);
 
                     string fileExtension = Path.GetExtension(item).ToLower();
 
                     foreach (var format in ImageFormatArray)
                     {
-                        if (fileExtension.Contains(format))
+                        if (fileExtension == format)
                         {
-                            string fileName = item.Split('\\').Last().Split('.').First();
+                            string fileName = item.Split('\\').Last();
 
-                            string newFileName = fileName + "---" + Guid.NewGuid() + fileExtension;
-
-                           // Tilføj validering
+                            // Tilføj validering
                             try
                             {
                                 string folderName = item.Split('\\' + fileName).First().Split('\\').Last();
+                                folderName = folderName + "---" + folderId;
+
                                 Console.WriteLine(folderName);
 
-                                if (!Directory.Exists(_CopyToFolderPath + folderName + "---" + folderId))
+                                if (!Directory.Exists(_CopyToFolderPath + folderName))
                                 {
-                                    Directory.CreateDirectory(_CopyToFolderPath + folderName + "---" + folderId);
+                                    Directory.CreateDirectory(_CopyToFolderPath + folderName);
                                 }
 
-                                File.Copy(item, _CopyToFolderPath + folderName + "---" + folderId + "\\" + newFileName);
+                                File.Copy(item, _CopyToFolderPath + folderName + "\\" + fileName);
                             }
                             catch (Exception e)
                             {
-                                _log.CreateLog(e.Message);
+                                _log.CreateLog(fileName, e.Message, item);
                             }
 
                             _imageCount += 1;
@@ -83,9 +85,7 @@ namespace SearchImageFilesPc
                 }
                 catch (Exception e)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine(e.Message);
-                    Console.ForegroundColor = ConsoleColor.Gray;
+                    _log.CreateLog(e.Message, item);
                 }
             }
         }

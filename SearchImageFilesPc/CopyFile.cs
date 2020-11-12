@@ -11,25 +11,20 @@ namespace SearchImageFilesPc
     {
         private readonly string[] _formatArray = new string[] { ".jpg", ".jpeg", ".png", ".gif", ".eps", ".raw", ".cr2", ".crw", ".nef", ".pef", ".tiff" };
 
-        public void RunProgram(string pathWhitFileName)
+        public void RunProgram(string pathWithFileName)
         {
-            string fileExtension = Path.GetExtension(pathWhitFileName).ToLower();
+            string fileExtension = Path.GetExtension(pathWithFileName).ToLower();
 
             foreach (var item in _formatArray)
             {
                 if (fileExtension.Contains(item))
                 {
-                    string fileName = pathWhitFileName.Split('\\').Last().Split('.').First();
+                    string fileName = pathWithFileName.Split('\\').Last();
 
-                    string newFileName = fileName + "-kopi" + fileExtension;
+                    Console.WriteLine(fileName);
 
-                    Console.WriteLine(newFileName);
-
-                    string path = pathWhitFileName.Split(fileName).First();
-
-                    File.Copy(pathWhitFileName, path + newFileName);
-
-                    Directory.Move(path + newFileName, @"C:\Users\Monosoft\Desktop\CopyTo\" + newFileName);
+                    string path = pathWithFileName.Split(fileName).First();
+                    Console.WriteLine(path);
                 }
             }
         }
