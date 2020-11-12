@@ -17,7 +17,7 @@ namespace SearchImageFilesPc
         public List<string> imageList;
 
         private readonly Logs _log;
-        private readonly string _CopyToFolderPath = @"D:\CopyTo\";
+        private readonly string _CopyToFolderPath = @""; // D:\CopyTo\
 
         public TestSearchFolders()
         {
@@ -28,6 +28,16 @@ namespace SearchImageFilesPc
 
         public void StartScanning(string folderPath)
         {
+            if (!Directory.Exists(_CopyToFolderPath) || _CopyToFolderPath.Length == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.WriteLine("\nMappen billederne skal kopiers til findes ikke.");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.BackgroundColor = ConsoleColor.Black;
+                return;
+            }
+
             Console.WriteLine("Scanning Startet.\n");
             FolderScan(folderPath);
         }
