@@ -17,18 +17,23 @@ namespace SearchImageFilesPc
         public List<string> imageList;
 
         private readonly Logs _log;
-        private readonly string _CopyToFolderPath = @""; // D:\CopyTo\
 
-        public TestSearchFolders()
+        private readonly string _scanPath;
+        private readonly string _copyToPath; // D:\CopyTo\
+
+        public TestSearchFolders(string scanPath, string copyToPath)
         {
-            _log = new Logs();
+            _scanPath = scanPath;
+            _copyToPath = copyToPath;
             _imageCount = 0;
+
+            _log = new Logs();
             imageList = new List<string>();
         }
 
-        public void StartScanning(string folderPath)
+        public void StartScanning()
         {
-            if (!Directory.Exists(_CopyToFolderPath) || _CopyToFolderPath.Length == 0)
+            if (!Directory.Exists(_copyToPath) || _copyToPath.Length == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.BackgroundColor = ConsoleColor.White;
@@ -39,7 +44,7 @@ namespace SearchImageFilesPc
             }
 
             Console.WriteLine("Scanning Startet.\n");
-            FolderScan(folderPath);
+            FolderScan(_scanPath);
         }
 
         private void FolderScan(string folderPath)
@@ -51,7 +56,7 @@ namespace SearchImageFilesPc
             foreach (var item in allFolders)
             {
                 // Tjekker ikke inde i stien C:\Program Files\WindowsApps\
-                if (!item.Contains(@"C:\Program Files\WindowsApps\"))
+                if (!item.Contains(@"\Program Files\WindowsApps\"))
                 {
                     try
                     {
@@ -71,14 +76,12 @@ namespace SearchImageFilesPc
                                     string folderName = item.Split('\\' + fileName).First().Split('\\').Last();
                                     folderName = folderName + "---" + folderId;
 
-                                    Console.WriteLine(folderName);
-
-                                    if (!Directory.Exists(_CopyToFolderPath + folderName))
+                                    if (!Directory.Exists(_copyToPath + folderName))
                                     {
-                                        Directory.CreateDirectory(_CopyToFolderPath + folderName);
+                                        Directory.CreateDirectory(_copyToPath + folderName);
                                     }
 
-                                    File.Copy(item, _CopyToFolderPath + folderName + "\\" + fileName);
+                                    File.Copy(item, _copyToPath + folderName + "\\" + fileName);
                                 }
                                 catch (Exception e)
                                 {
