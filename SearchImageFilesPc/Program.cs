@@ -13,10 +13,12 @@ namespace SearchImageFilesPc
             TestSearchFolders testSearchFolders = new TestSearchFolders();
             testSearchFolders.StartScanning(@"C:\Users\");
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n!--------------------------------------------!");
             Console.WriteLine("Billeder: " + testSearchFolders._imageCount);
             Console.WriteLine("!--------------------------------------------!\n");
-            Console.ReadKey();
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ReadLine();
         }
 
 
