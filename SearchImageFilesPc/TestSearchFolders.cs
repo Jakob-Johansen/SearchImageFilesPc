@@ -17,7 +17,7 @@ namespace SearchImageFilesPc
         public List<string> imageList;
 
         private readonly Logs _log;
-        private readonly string _CopyToFolderPath = @""; // D:\CopyTo\
+        private readonly string _CopyToFolderPath = @"D:\CopyTo\"; // D:\CopyTo\
 
         public TestSearchFolders()
         {
