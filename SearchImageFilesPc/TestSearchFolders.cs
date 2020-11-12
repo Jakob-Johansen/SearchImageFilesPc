@@ -17,7 +17,7 @@ namespace SearchImageFilesPc
         public List<string> imageList;
 
         private readonly Logs _log;
-        private readonly string _CopyToFolderPath = @"D:\CopyTo\";
+        private readonly string _CopyToFolderPath = @""; // D:\CopyTo\
 
         public TestSearchFolders()
         {
@@ -28,6 +28,16 @@ namespace SearchImageFilesPc
 
         public void StartScanning(string folderPath)
         {
+            if (!Directory.Exists(_CopyToFolderPath) || _CopyToFolderPath.Length == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.WriteLine("\nMappen billederne skal kopiers til findes ikke.");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.BackgroundColor = ConsoleColor.Black;
+                return;
+            }
+
             Console.WriteLine("Scanning Startet.\n");
             FolderScan(folderPath);
         }
@@ -40,53 +50,57 @@ namespace SearchImageFilesPc
 
             foreach (var item in allFolders)
             {
-                try
+                // Tjekker ikke inde i stien C:\Program Files\WindowsApps\
+                if (!item.Contains(@"C:\Program Files\WindowsApps\"))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(item);
-
-                    string fileExtension = Path.GetExtension(item).ToLower();
-
-                    foreach (var format in ImageFormatArray)
+                    try
                     {
-                        if (fileExtension == format)
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine(item);
+
+                        string fileExtension = Path.GetExtension(item).ToLower();
+
+                        foreach (var format in ImageFormatArray)
                         {
-                            string fileName = item.Split('\\').Last();
-
-                            // Tilføj validering
-                            try
+                            if (fileExtension == format)
                             {
-                                string folderName = item.Split('\\' + fileName).First().Split('\\').Last();
-                                folderName = folderName + "---" + folderId;
+                                string fileName = item.Split('\\').Last();
 
-                                Console.WriteLine(folderName);
-
-                                if (!Directory.Exists(_CopyToFolderPath + folderName))
+                                try
                                 {
-                                    Directory.CreateDirectory(_CopyToFolderPath + folderName);
+                                    string folderName = item.Split('\\' + fileName).First().Split('\\').Last();
+                                    folderName = folderName + "---" + folderId;
+
+                                    Console.WriteLine(folderName);
+
+                                    if (!Directory.Exists(_CopyToFolderPath + folderName))
+                                    {
+                                        Directory.CreateDirectory(_CopyToFolderPath + folderName);
+                                    }
+
+                                    File.Copy(item, _CopyToFolderPath + folderName + "\\" + fileName);
+                                }
+                                catch (Exception e)
+                                {
+                                    _log.CreateLog(fileName, e.Message, item);
                                 }
 
-                                File.Copy(item, _CopyToFolderPath + folderName + "\\" + fileName);
+                                _imageCount += 1;
+                                imageList.Add(item);
                             }
-                            catch (Exception e)
-                            {
-                                _log.CreateLog(fileName, e.Message, item);
-                            }
+                        }
 
-                            _imageCount += 1;
-                            imageList.Add(item);
+                        if (Directory.Exists(item))
+                        {
+                            FolderScan(item);
                         }
                     }
-
-                    if (Directory.Exists(item))
+                    catch (Exception e)
                     {
-                        FolderScan(item);
+                        _log.CreateLog(e.Message, item);
                     }
                 }
-                catch (Exception e)
-                {
-                    _log.CreateLog(e.Message, item);
-                }
+
             }
         }
     }
