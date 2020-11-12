@@ -10,15 +10,18 @@ namespace SearchImageFilesPc
 
         static void Main(string[] args)
         {
-            TestSearchFolders testSearchFolders = new TestSearchFolders();
-            testSearchFolders.StartScanning(@"C:\");
+            Ui ui = new Ui();
+            ui.RunUi();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n!--------------------------------------------!");
-            Console.WriteLine("Billeder: " + testSearchFolders._imageCount);
-            Console.WriteLine("!--------------------------------------------!\n");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.ReadLine();
+            //TestSearchFolders testSearchFolders = new TestSearchFolders();
+            //testSearchFolders.StartScanning(@"C:\");
+
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("\n!--------------------------------------------!");
+            //Console.WriteLine("Billeder: " + testSearchFolders._imageCount);
+            //Console.WriteLine("!--------------------------------------------!\n");
+            //Console.ForegroundColor = ConsoleColor.Gray;
+            //Console.ReadLine();
         }
 
 
