@@ -11,7 +11,7 @@ namespace SearchImageFilesPc
         static void Main(string[] args)
         {
             TestSearchFolders testSearchFolders = new TestSearchFolders();
-            testSearchFolders.StartScanning(@"C:\Users\");
+            testSearchFolders.StartScanning(@"C:\");
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n!--------------------------------------------!");
