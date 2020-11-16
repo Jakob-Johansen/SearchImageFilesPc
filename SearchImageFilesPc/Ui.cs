@@ -25,12 +25,12 @@ namespace SearchImageFilesPc
             Thread.Sleep(3000);
             Console.Clear();
 
-            TestSearchFolders testSearchFolders = new TestSearchFolders(scanPath, copyPath);
-            testSearchFolders.StartScanning();
+            SearchFolders searchFolders = new SearchFolders(scanPath, copyPath);
+            searchFolders.StartScanning();
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n!--------------------------------------------!");
-            Console.WriteLine("Billeder: " + testSearchFolders._imageCount);
+            Console.WriteLine("Billeder: " + searchFolders._imageCount);
             Console.WriteLine("!--------------------------------------------!\n");
             Console.ForegroundColor = ConsoleColor.Gray;
 
